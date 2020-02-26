@@ -1,11 +1,11 @@
 import {connect} from 'react-redux';
 import {
-    followAC,
-    setCurrentPageAC,
-    setUsersAC,
-    setUsersTotalCountAC,
-    toggleIsFetchingAC,
-    unfollowAC
+    follow,
+    setCurrentPage,
+    setUsers,
+    setTotalUsersCount,
+    toggleIsFetching,
+    unfollow
 } from '../../redux/users_reduser';
 import React from 'react';
 import * as axios from 'axios';
@@ -20,7 +20,7 @@ class UsersContainer extends React.Component {
         axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
             .then(response => {
                 this.props.toggleIsFetching(false);
-                this.props.setUser(response.data.items);
+                this.props.setUsers(response.data.items);
                 this.props.setTotalUsersCount(response.data.totalCount);
             });
     }
@@ -31,7 +31,7 @@ class UsersContainer extends React.Component {
         axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`)
             .then(response => {
                 this.props.toggleIsFetching(false);
-                this.props.setUser(response.data.items);
+                this.props.setUsers(response.data.items);
             });
     };
 
@@ -58,27 +58,32 @@ let mapStateToProps = (state) => { // прокидывает props в компо
     }
 };
 
-let mapDispatchToProps = (dispatch) => {
-    return {
-        follow: (userId) => {
-            dispatch(followAC(userId)) // диспатчим не AC, а результат работы AC
-        },
-        unfollow: (userId) => {
-            dispatch(unfollowAC(userId))
-        },
-        setUser: (users) => {
-            dispatch(setUsersAC(users))
-        },
-        setCurrentPage: (pageNumber) => {
-            dispatch(setCurrentPageAC(pageNumber))
-        },
-        setTotalUsersCount: (totalCount) => {
-            dispatch(setUsersTotalCountAC(totalCount))
-        },
-        toggleIsFetching: (isFetching) => { // callback который попадает в props
-            dispatch(toggleIsFetchingAC(isFetching)) // когда компонента его вызовет он задиспатчит action
-        }
-    }
-};
+//старый диспатч
+// let mapDispatchToProps = (dispatch) => {
+//     return {
+//         follow: (userId) => {
+//             dispatch(followAC(userId)) // диспатчим не AC, а результат работы AC
+//         },
+//         unfollow: (userId) => {
+//             dispatch(unfollowAC(userId))
+//         },
+//         setUser: (users) => {
+//             dispatch(setUsersAC(users))
+//         },
+//         setCurrentPage: (pageNumber) => {
+//             dispatch(setCurrentPageAC(pageNumber))
+//         },
+//         setTotalUsersCount: (totalCount) => {
+//             dispatch(setUsersTotalCountAC(totalCount))
+//         },
+//         toggleIsFetching: (isFetching) => { // callback который попадает в props
+//             dispatch(toggleIsFetchingAC(isFetching)) // когда компонента его вызовет он задиспатчит action
+//         }
+//     }
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
+export default connect(mapStateToProps, {
+        follow, unfollow, setUsers,
+        setCurrentPage, setTotalUsersCount, toggleIsFetching
+    },
+)(UsersContainer);

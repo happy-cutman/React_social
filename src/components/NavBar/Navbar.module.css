@@ -1,0 +1,35 @@
+.nav {
+    grid-area: nav;
+    background-color: sandybrown;
+    padding: 20px;
+}
+
+.item a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.item .active {
+    color: darkred;
+}
+
+.item a:hover {
+    color: darkred;
+}
+
+.friends {
+    color: white;
+    font-size: 30px;
+}
+
+.friend img{
+    max-height: 50px;
+    max-width: 50px;
+    border-radius: 30px;
+}
+
+.friend {
+    font-size: 20px;
+}
+

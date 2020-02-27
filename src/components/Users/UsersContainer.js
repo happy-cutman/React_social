@@ -6,7 +6,7 @@ import {
     setTotalUsersCount,
     toggleIsFetching,
     unfollow
-} from '../../redux/users_reduser';
+} from '../../redux/users_reducer';
 import React from 'react';
 import * as axios from 'axios';
 import Users from './Users';

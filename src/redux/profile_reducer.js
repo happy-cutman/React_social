@@ -1,5 +1,6 @@
 const ADD_POST = 'ADD-POST';
-const UPDATE_POST = 'UPDATE-POST'; // используем константы чтобы не использовать строки и не опечататься
+const UPDATE_POST = 'UPDATE-POST';
+const SET_USER_PROFILE = 'SET_USER_PROFILE'; // используем константы чтобы не использовать строки и не опечататься
 
 let initialState = {  // не имеем права изменять этот объект поэтому делаем копию в reducer и меняем копию
     posts: [
@@ -8,7 +9,8 @@ let initialState = {  // не имеем права изменять этот о
         {id: '3', message: 'Wonderful life', like: '12'},
         {id: '4', message: 'Arom dom dom', like: '1'},
     ],
-    newPostText: 'IT-Koshka'
+    newPostText: 'IT-Koshka',
+    profile: null,
 };
 
 
@@ -27,6 +29,9 @@ const profileReducer = (state = initialState, action) => { // изменяет s
                 newPostText: action.text,
             };
 
+        case SET_USER_PROFILE:
+            return {...state, profile: action.profile};
+
         default:
             return state; // если ничего не изменяется то возвращается просто state который и был
     }
@@ -44,5 +49,7 @@ export const updatePostActionCreator = (text) => {
         text: text,
     }
 };
+
+export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile});
 
 export default profileReducer;

@@ -5,6 +5,7 @@ import {NavLink} from 'react-router-dom';
 
 
 let Users = (props) => {
+
     let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize); // определяет сколько должно получиться страниц, делим общее колво пользоателей на размер отображаемых на странице. Math.ceil() окрушляет в большую сторону
 
     let pages = [];
@@ -32,8 +33,8 @@ let Users = (props) => {
                     </div>
                     <div>
                         {user.followed
-                            ? <button onClick={ () => {props.unfollow(user.id)} }>UNFOLLOW</button>
-                            : <button onClick={ () => {props.follow(user.id)} }>FOLLOW</button>}
+                            ? <button onClick={ () => {props.unFollow(user.id)} }>UNFOLLOW</button>
+                            : <button onClick={ () => {props.onFollow(user.id)} }>FOLLOW</button>}
                     </div>
                 </span>
                     <span>

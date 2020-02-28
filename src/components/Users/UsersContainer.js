@@ -8,31 +8,51 @@ import {
     unfollow
 } from '../../redux/users_reducer';
 import React from 'react';
-import * as axios from 'axios';
 import Users from './Users';
 import Preloader from '../common/Preloader/Preloader';
+import {followAPI, requestFollow, requestUnFollow, usersAPI} from '../../api/api';
 
 
 class UsersContainer extends React.Component {
 
     componentDidMount() { // это метод из родительского класса, компонент монтируется в страничку один раз
         this.props.toggleIsFetching(true);
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-            .then(response => {
-                this.props.toggleIsFetching(false);
-                this.props.setUsers(response.data.items);
-                this.props.setTotalUsersCount(response.data.totalCount);
-            });
+
+        usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => { // берём из props нужные параметры и они передаются в DAL в котором написана эта функция
+            this.props.toggleIsFetching(false);
+            this.props.setUsers(data.items);
+            this.props.setTotalUsersCount(data.totalCount);
+        });
+
     }
 
     onPageChanged = (pageNumber) => {
         this.props.setCurrentPage(pageNumber);
         this.props.toggleIsFetching(true);
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`)
-            .then(response => {
+
+        usersAPI.getUsers(pageNumber, this.props.pageSize)
+            .then(data => {  // dat'y возвращает ф-уя из DAL и мы её используем вместо response, не весь response целиком, а data из response
                 this.props.toggleIsFetching(false);
-                this.props.setUsers(response.data.items);
+                this.props.setUsers(data.items);
             });
+    };
+
+    onFollow = (userId) => {
+        followAPI.requestFollow(userId)
+            .then(data => {
+                if (data.resultCode == 0) {
+                    this.props.follow(userId)
+                }
+            })
+    };
+
+    unFollow = (userId) => {
+        followAPI.requestUnFollow(userId)
+            .then(data => {
+                if (data.resultCode == 0) {
+                    this.props.unfollow(userId)
+                }
+            })
     };
 
     render() {
@@ -43,7 +63,7 @@ class UsersContainer extends React.Component {
                                      currentPage={this.props.currentPage}
                                      onPageChanged={this.onPageChanged}
                                      users={this.props.users}
-                                     follow={this.props.follow} unfollow={this.props.unfollow} />
+                                     onFollow={this.onFollow} unFollow={this.unFollow} />
                 </>
         };
 }

@@ -9,6 +9,7 @@ import DialogsContainer from './components/Dialogs/DialogsContainer';
 import NavBarContainer from './components/NavBar/NavBarContainer';
 import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
+import HeaderContainer from './components/Header/HeaderContainer';
 
 
 
@@ -16,7 +17,7 @@ const App = (props) => {
     return (
         <BrowserRouter> {/* нужен для работы <Route/>  оборачивает весь код в компоненте APP*/}
             <div className='app-wrapper'>
-                <Header/>
+                <HeaderContainer/>
                 <NavBarContainer/>
                 <div className='app-wrapper-content'>
                     <Route path='/dialogs' render={ () => <DialogsContainer/> }/> {/* Отрисовует компонент <Dialogs/> при обарщении по пути  */}

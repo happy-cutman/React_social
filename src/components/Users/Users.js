@@ -33,8 +33,8 @@ let Users = (props) => {
                     </div>
                     <div>
                         {user.followed
-                            ? <button onClick={ () => {props.unFollow(user.id)} }>UNFOLLOW</button>
-                            : <button onClick={ () => {props.onFollow(user.id)} }>FOLLOW</button>}
+                            ? <button disabled={props.followingInProgress.some(id => id === user.id)} onClick={ () => {props.unFollow(user.id)} }>UNFOLLOW</button> // если кто-то в этом массиве равен id пользователя, то будет true
+                            : <button disabled={props.followingInProgress.some(id => id === user.id)} onClick={ () => {props.onFollow(user.id)} }>FOLLOW</button>}
                     </div>
                 </span>
                     <span>

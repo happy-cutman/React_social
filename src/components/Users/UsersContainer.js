@@ -5,7 +5,7 @@ import {
     setUsers,
     setTotalUsersCount,
     toggleIsFetching,
-    unfollow
+    unfollow, toggleFollowingProgress, getUsersThunkCreator
 } from '../../redux/users_reducer';
 import React from 'react';
 import Users from './Users';
@@ -16,13 +16,15 @@ import {followAPI, requestFollow, requestUnFollow, usersAPI} from '../../api/api
 class UsersContainer extends React.Component {
 
     componentDidMount() { // это метод из родительского класса, компонент монтируется в страничку один раз
-        this.props.toggleIsFetching(true);
+        // this.props.toggleIsFetching(true);
+        //
+        // usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => { // берём из props нужные параметры и они передаются в DAL в котором написана эта функция
+        //     this.props.toggleIsFetching(false);
+        //     this.props.setUsers(data.items);
+        //     this.props.setTotalUsersCount(data.totalCount);
+        // });
 
-        usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => { // берём из props нужные параметры и они передаются в DAL в котором написана эта функция
-            this.props.toggleIsFetching(false);
-            this.props.setUsers(data.items);
-            this.props.setTotalUsersCount(data.totalCount);
-        });
+        this.props.getUsersThunkCreator();
 
     }
 
@@ -38,21 +40,25 @@ class UsersContainer extends React.Component {
     };
 
     onFollow = (userId) => {
+        this.props.toggleFollowingProgress(true, userId);
         followAPI.requestFollow(userId)
             .then(data => {
                 if (data.resultCode == 0) {
                     this.props.follow(userId)
                 }
-            })
+            });
+        this.props.toggleFollowingProgress(false, userId)
     };
 
     unFollow = (userId) => {
+        this.props.toggleFollowingProgress(true, userId);
         followAPI.requestUnFollow(userId)
             .then(data => {
                 if (data.resultCode == 0) {
                     this.props.unfollow(userId)
                 }
-            })
+            });
+        this.props.toggleFollowingProgress(false, userId)
     };
 
     render() {
@@ -63,7 +69,8 @@ class UsersContainer extends React.Component {
                                      currentPage={this.props.currentPage}
                                      onPageChanged={this.onPageChanged}
                                      users={this.props.users}
-                                     onFollow={this.onFollow} unFollow={this.unFollow} />
+                                     onFollow={this.onFollow} unFollow={this.unFollow}
+                       followingInProgress={this.props.followingInProgress}/>
                 </>
         };
 }
@@ -74,7 +81,8 @@ let mapStateToProps = (state) => { // прокидывает props в компо
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching
+        isFetching: state.usersPage.isFetching,
+        followingInProgress: state.usersPage.followingInProgress
     }
 };
 
@@ -104,6 +112,5 @@ let mapStateToProps = (state) => { // прокидывает props в компо
 
 export default connect(mapStateToProps, {
         follow, unfollow, setUsers,
-        setCurrentPage, setTotalUsersCount, toggleIsFetching
-    },
-)(UsersContainer);
+        setCurrentPage, setTotalUsersCount, toggleIsFetching,
+        toggleFollowingProgress, getUsersThunkCreator })(UsersContainer);

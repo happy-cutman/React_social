@@ -1,4 +1,4 @@
-import {combineReducers, createStore} from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import profileReducer from './profile_reducer';
 import messagesReducer from './messages_reducer';
 import sideBarReducer from './sidebar_reducer';
@@ -14,7 +14,7 @@ let reducers = combineReducers({ // воспринимать как state
     auth: authReducer
 });
 
-let store = createStore(reducers);
+let store = createStore(reducers, applyMiddleware()); // applyMiddleware для создания доп слоя для санок чтобы в store можно было диспатчить функции
 
 window.store = store;
 

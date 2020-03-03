@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './Dialogs.module.css'
 import DialogItem from './DialogItem/DialogItem';
 import Message from './Message/Message';
+import {Redirect} from 'react-router-dom';
 
 
 const Dialogs = (props) => {
@@ -19,6 +20,8 @@ const Dialogs = (props) => {
     let dialogsElements = props.messagesPage.dialogs.map( el => <DialogItem name={el.name} key={el.id} id={el.id} ava={el.ava}/>);
     let messagesElements = props.messagesPage.messages.map( el => <Message message={el.message} key={el.id} id={el.id}/>);
     let newMessageText = props.messagesPage.newMessage;
+
+    // if (!props.isAuth) return <Redirect to='/login'/>; // редирект на страницу логина если не авторизован
 
     // Отрисовываем данные
     return (

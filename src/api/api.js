@@ -1,7 +1,8 @@
 import * as axios from 'axios'
+import {setUserProfile} from '../redux/profile_reducer';
 
 const instance = axios.create({ // нужен для обобщения настроек и использования их дальше
-    withCredentials:true,
+    withCredentials:true, // withCredentials инфа о том, что авторизованы
     headers: {
         'API-KEY': '0e21d7f1-f5bd-4558-986a-248392e18716'
     },
@@ -14,32 +15,28 @@ export const usersAPI = {
             .then(response => {
                 return response.data
             })
-    }
-};
-
-export const followAPI = {
-    // при POST вторым параметром передаём пустой объект
-    requestFollow(userId) {
+    },
+    follow(userId) {
         return instance.post(`follow/${userId}`, {}) // instance хранит withCredentials, baseURL, headers: API-KEY
             .then(response => {
                 return response.data
-        })
+            })
     },
-
-    requestUnFollow(userId) {
-        return instance.delete(`follow/${userId}`)
-            .then(response => {
-                return response.data
-        })
-    }
-};
-
-export const authAPI = {
-    authMe(isAuth) {
-        return instance.get('auth/me') // withCredentials инфа о том, что авторизованы
+    unfollow(userId) {
+        return instance.delete(`follow/${userId}`, {}) // instance хранит withCredentials, baseURL, headers: API-KEY
             .then(response => {
                 return response.data
             })
+    },
+    getProfile(userId) {
+        return instance.get(`profile/${userId}`)
+    }
+};
+
+
+export const authAPI = {
+    authMe() {
+        return instance.get('auth/me')
     }
 };
 

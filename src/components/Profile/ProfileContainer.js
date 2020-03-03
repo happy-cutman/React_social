@@ -1,13 +1,14 @@
 import React from 'react';
-import * as axios from 'axios';
 import Profile from './Profile';
 import {connect} from 'react-redux';
-import {setUserProfile} from '../../redux/profile_reducer';
+import {getUserProfile} from '../../redux/profile_reducer';
 import {withRouter} from 'react-router-dom';
+import {withAuthRedirect} from '../../hoc/withAuthRedirect';
+import {compose} from 'redux';
 
 
 
-// отправляет запросы на сервер и оборачивает <Profile/>
+// оборачивает <Profile/>
 class ProfileContainer extends React.Component  {
 
     componentDidMount() {
@@ -17,13 +18,12 @@ class ProfileContainer extends React.Component  {
             userId = 2;
         }
 
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
-            .then(response => {
-                this.props.setUserProfile(response.data)
-            });
+        this.props.getUserProfile(userId); // отправляет запросы на сервер и
+
     }
 
     render() {
+
         return (
             <div>
                 <Profile {...this.props} profile={this.props.profile}/> {/* props который пришёл мы раскукоживаем и как атрибуты прокидываем дальше в компоненту */}
@@ -32,15 +32,26 @@ class ProfileContainer extends React.Component  {
     }
 }
 
+
+
 let mapStateToProps = (state) => {
     return {
-        profile: state.profilePage.profile
+        profile: state.profilePage.profile,
     }
 };
 
-// возвращает компоненту и закидует в нее данные из url оборачивает ProfileContainer
-let WithUrlDataContainerComponent = withRouter(ProfileContainer);
+export default compose(
+    connect(mapStateToProps, {getUserProfile}),
+    withRouter,
+    withAuthRedirect
+)(ProfileContainer);
 
-// возвращает компоненту и закидует в нее данные из store и оборачивает WithUrlDataContainerComponent (кружочки в кружочках)
-export default connect(mapStateToProps, {setUserProfile})(WithUrlDataContainerComponent);
+// // оборачивает <ProfileContainer>
+// let AuthRedirectComponent = withAuthRedirect(ProfileContainer); // HOC создал нужную логику
+
+// // возвращает компоненту и закидует в нее данные из url оборачивает AuthRedirectComponent является HOC'ом
+// let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent);
+//
+// // возвращает компоненту и закидует в нее данные из store и оборачивает WithUrlDataContainerComponent (кружочки в кружочках)
+// export default connect(mapStateToProps, {getUserProfile})(WithUrlDataContainerComponent);
 

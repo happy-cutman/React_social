@@ -4,6 +4,7 @@ import messagesReducer from './messages_reducer';
 import sideBarReducer from './sidebar_reducer';
 import usersReducer from './users_reducer';
 import authReducer from './auth_reducer';
+import thunkMiddleware from 'redux-thunk';
 
 
 let reducers = combineReducers({ // воспринимать как state
@@ -14,7 +15,7 @@ let reducers = combineReducers({ // воспринимать как state
     auth: authReducer
 });
 
-let store = createStore(reducers, applyMiddleware()); // applyMiddleware для создания доп слоя для санок чтобы в store можно было диспатчить функции
+let store = createStore(reducers, applyMiddleware(thunkMiddleware)); // applyMiddleware для создания доп слоя для санок чтобы в store можно было диспатчить функции
 
 window.store = store;
 

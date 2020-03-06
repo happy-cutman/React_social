@@ -1,5 +1,5 @@
 import * as axios from 'axios'
-import {setUserProfile} from '../redux/profile_reducer';
+
 
 const instance = axios.create({ // нужен для обобщения настроек и использования их дальше
     withCredentials:true, // withCredentials инфа о том, что авторизованы
@@ -8,6 +8,7 @@ const instance = axios.create({ // нужен для обобщения наст
     },
     baseURL: 'https://social-network.samuraijs.com/api/1.0/'
 });
+
 
 export const usersAPI = {
     getUsers(currentPage = 1, pageSize = 10) {
@@ -27,9 +28,18 @@ export const usersAPI = {
             .then(response => {
                 return response.data
             })
-    },
+    }
+};
+
+export const profileAPI = {
     getProfile(userId) {
         return instance.get(`profile/${userId}`)
+    },
+    getStatus(userId) {
+        return instance.get(`profile/status/${userId}`)
+    },
+    updateStatus(status) {
+        return instance.put(`profile/status`, {status: status}) // отправляем на сервер объект со свойством статус, как требует документация
     }
 };
 

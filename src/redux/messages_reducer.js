@@ -1,4 +1,3 @@
-const UPDATE_MESSAGE = 'UPDATE-MESSAGE';
 const SEND_MESSAGE = 'SEND-MESSAGE';
 
 let inintialState = {
@@ -36,24 +35,17 @@ let inintialState = {
         {id: '4', message: 'Where are your happy?'},
         {id: '5', message: 'The weather is fine'},
     ],
-    newMessage: 'IT-koshka',
 };
 
 const messagesReducer = (state = inintialState, action) => {
 
     switch (action.type) {
 
-        case UPDATE_MESSAGE:
-            return { // создаём объект { заполняем старыми значениями, изменяем новое и возвращаем}
-                ...state, // копируем старый объект и забираем св-ва
-                newMessage: action.text // конкретное св-во перезатираем
-            };
-
         case SEND_MESSAGE:
             return {
                 ...state,
                 newMessage: '',
-                messages: [...state.messages, {id: '6', message: state.newMessage}], // создаём новый массив [, с левой стороны закидываем все элементы messages из старого массива, справа добавляем ещё один элемент в массив]
+                messages: [...state.messages, {id: '6', message: action.newMessageText}], // создаём новый массив [, с левой стороны закидываем все элементы messages из старого массива, справа добавляем ещё один элемент в массив]
             };
 
         default:
@@ -61,7 +53,6 @@ const messagesReducer = (state = inintialState, action) => {
     }
 };
 
-export const sendMessageCreator = () => ({type: SEND_MESSAGE});
-export const updateMessageCreator = (text) => ({type: UPDATE_MESSAGE, text: text});
+export const sendMessageCreator = (newMessageText) => ({type: SEND_MESSAGE, newMessageText});
 
 export default messagesReducer;

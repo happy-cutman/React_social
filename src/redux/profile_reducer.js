@@ -1,10 +1,8 @@
 import {profileAPI} from '../api/api';
 
 const ADD_POST = 'ADD-POST';
-const UPDATE_POST = 'UPDATE-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE'; // используем константы чтобы не использовать строки и не опечататься
 const SET_USER_STATUS = 'SET_USER_STATUS';
-
 
 let initialState = {  // не имеем права изменять этот объект поэтому делаем копию в reducer и меняем копию
     posts: [
@@ -13,7 +11,6 @@ let initialState = {  // не имеем права изменять этот о
         {id: '3', message: 'Wonderful life', like: '12'},
         {id: '4', message: 'Arom dom dom', like: '1'},
     ],
-    newPostText: 'IT-Koshka',
     profile: null,
     status: ''
 };
@@ -21,17 +18,11 @@ let initialState = {  // не имеем права изменять этот о
 
 const profileReducer = (state = initialState, action) => { // изменяет state в ависимости от action и возвращает обновлённые state. Если state не приходит , то по умолчанию он InitialState
     switch (action.type) {
+
         case ADD_POST:
             return {
                ...state,
-                posts: [...state.posts, {id: '5', message: state.newPostText, like: '0'}],
-                newPostText: '',
-            };
-
-        case UPDATE_POST:
-            return {
-                ...state,
-                newPostText: action.text,
+                posts: [...state.posts, {id: '5', message: action.newPostText, like: '0'}],
             };
 
         case SET_USER_PROFILE:
@@ -46,17 +37,14 @@ const profileReducer = (state = initialState, action) => { // изменяет s
 
 };
 
-export const addPostActionCreator = () => { // создаёт объект action вызывается в UI
-    return {
-        type: ADD_POST
-    }
-};
-export const updatePostActionCreator = (text) => {
-    return {
-        type: UPDATE_POST,
-        text: text,
-    }
-};
+// export const addPostActionCreator = (newPostText) => { // создаёт объект action вызывается в UI
+//     return {
+//         type: ADD_POST,
+//         newPostText
+//     }
+// };
+
+export const addPostActionCreator = (newPostText) => ({type: ADD_POST, newPostText});
 export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile});
 export const setUserStatus = (status) => ({type: SET_USER_STATUS, status});
 

@@ -3,7 +3,6 @@ import Profile from './Profile';
 import {connect} from 'react-redux';
 import {getUserProfile, getUserStatus, updateUserStatus} from '../../redux/profile_reducer';
 import {withRouter} from 'react-router-dom';
-import {withAuthRedirect} from '../../hoc/withAuthRedirect';
 import {compose} from 'redux';
 
 
@@ -15,7 +14,10 @@ class ProfileContainer extends React.Component  {
         let userId = this.props.match.params.userId;
         // если userId нет, то мы загрузим второго пользователя
         if (!userId) {
-            userId = 2;
+            userId = this.props.authorizedUserId;
+            if (!userId) {
+                this.props.history.push('/login')
+            }
         }
 
         // отправляет запросы на сервер
@@ -41,7 +43,9 @@ class ProfileContainer extends React.Component  {
 let mapStateToProps = (state) => {
     return {
         profile: state.profilePage.profile,
-        status: state.profilePage.status
+        status: state.profilePage.status,
+        authorizedUserId: state.auth.userId,
+        isAuth: state.auth.isAuth
     }
 };
 

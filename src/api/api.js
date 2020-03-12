@@ -4,7 +4,7 @@ import * as axios from 'axios'
 const instance = axios.create({ // нужен для обобщения настроек и использования их дальше
     withCredentials:true, // withCredentials инфа о том, что авторизованы
     headers: {
-        'API-KEY': '0e21d7f1-f5bd-4558-986a-248392e18716'
+        'API-KEY': 'c24a5076-a597-4051-8164-9434ac7fac5e'
     },
     baseURL: 'https://social-network.samuraijs.com/api/1.0/'
 });
@@ -48,8 +48,11 @@ export const authAPI = {
     authMe() {
         return instance.get('auth/me')
     },
-    onLogin() {
-        return instance.post('auth/login')
+    onLogin(email, password, rememberMe = false) {
+        return instance.post('auth/login', {email, password, rememberMe})
+    },
+    onLogout() {
+        return instance.delete('auth/login')
     }
 };
 

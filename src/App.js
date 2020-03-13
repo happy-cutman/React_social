@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, withRouter} from 'react-router-dom';
 import News from './components/News/News';
 import Music from './components/Music/Music';
 import Settings from './components/Settings/Settings';
@@ -13,6 +13,7 @@ import LoginPage from './components/Login/Login';
 import {connect} from 'react-redux';
 import {initializeApp} from './redux/app_reducer';
 import Preloader from './components/common/Preloader/Preloader';
+import {compose} from 'redux';
 
 
 class App extends React.Component {
@@ -52,4 +53,6 @@ let mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps, {initializeApp})(App);
+export default compose (
+    // withRouter,
+    connect(mapStateToProps, {initializeApp}))(App)

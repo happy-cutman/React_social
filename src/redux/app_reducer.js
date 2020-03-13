@@ -1,5 +1,3 @@
-import {authAPI} from '../api/api';
-import {stopSubmit} from 'redux-form';
 import {getAuthUserData} from './auth_reducer'; // это AC
 
 const INITIALIZED_SUCCESS = 'INITIALIZED_SUCCESS';
@@ -27,7 +25,7 @@ export const initializedSuccess = () => ( {type: INITIALIZED_SUCCESS} );
 
 // диспатчи пройдут параллельно и после их завершения произойдёт диспатч инициализации
 export const initializeApp = () => (dispatch) => {
-    let promise = getAuthUserData();
+    let promise = dispatch(getAuthUserData());
     // dispatch(somethingelse)
     // dispatch(somethingelse)
     // dispatch(somethingelse)
@@ -36,7 +34,5 @@ export const initializeApp = () => (dispatch) => {
             dispatch(initializedSuccess())
     })
 };
-
-
 
 export default appReducer;

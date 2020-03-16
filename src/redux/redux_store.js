@@ -1,4 +1,4 @@
-import {applyMiddleware, combineReducers, createStore} from 'redux';
+import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
 import profileReducer from './profile_reducer';
 import messagesReducer from './messages_reducer';
 import sideBarReducer from './sidebar_reducer';
@@ -20,8 +20,13 @@ let reducers = combineReducers({ // воспринимать как state
     app: appReducer,
 });
 
-let store = createStore(reducers, applyMiddleware(thunkMiddleware)); // applyMiddleware для создания доп слоя для санок чтобы в store можно было диспатчить функции
+// код для расширения redux chrome
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
+////
 
-window.store = store;
+// let store = createStore(reducers, applyMiddleware(thunkMiddleware)); // applyMiddleware для создания доп слоя для санок чтобы в store можно было диспатчить функции
+
+window.__store__ = store;
 
 export default store;

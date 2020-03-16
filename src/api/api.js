@@ -4,7 +4,7 @@ import * as axios from 'axios'
 const instance = axios.create({ // нужен для обобщения настроек и использования их дальше
     withCredentials:true, // withCredentials инфа о том, что авторизованы
     headers: {
-        'API-KEY': 'c24a5076-a597-4051-8164-9434ac7fac5e'
+        'API-KEY': '50ee7b11-4e09-4969-b463-b202a33d828b'
     },
     baseURL: 'https://social-network.samuraijs.com/api/1.0/'
 });

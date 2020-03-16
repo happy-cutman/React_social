@@ -3,6 +3,7 @@ import {profileAPI} from '../api/api';
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE'; // используем константы чтобы не использовать строки и не опечататься
 const SET_USER_STATUS = 'SET_USER_STATUS';
+const DELETE_POST = 'DELETE_POST';
 
 let initialState = {  // не имеем права изменять этот объект поэтому делаем копию в reducer и меняем копию
     posts: [
@@ -31,6 +32,10 @@ const profileReducer = (state = initialState, action) => { // изменяет s
         case SET_USER_STATUS:
             return {...state, status: action.status};
 
+        case DELETE_POST:
+            return {...state,
+                    posts: state.posts.filter(post => post.id != action.postId)};
+
         default:
             return state; // если ничего не изменяется то возвращается просто state который и был
     }
@@ -47,6 +52,7 @@ const profileReducer = (state = initialState, action) => { // изменяет s
 export const addPostActionCreator = (newPostText) => ({type: ADD_POST, newPostText});
 export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile});
 export const setUserStatus = (status) => ({type: SET_USER_STATUS, status});
+export const deletePost = (postId) => ({type: DELETE_POST, postId});
 
 // thunk creator
 export const getUserProfile = (userId) => {

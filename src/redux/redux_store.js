@@ -9,7 +9,6 @@ import {reducer as formReducer} from 'redux-form';
 import appReducer from './app_reducer';
 
 
-
 let reducers = combineReducers({ // воспринимать как state
     profilePage: profileReducer, // profilePage - ветки нашёго store, profilePage обслуживается profileReducer'ом
     messagesPage: messagesReducer,

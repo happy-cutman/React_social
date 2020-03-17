@@ -7,12 +7,13 @@ import {maxLengthCreator, required} from '../../utils/validators/validators';
 import {Redirect} from 'react-router-dom';
 import classes from '../common/FormsControls/FormsControls.module.css'
 
-// 78 урок не работает логин и логаут
+
 let maxLength20 = maxLengthCreator(20);
 
-const LoginForm = (props) => {
+// для props используем деструктуризацию достаём нужные свойства
+const LoginForm = ({handleSubmit, error}) => {
     return (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <Field component={Input} name={'email'} type='email' placeholder={'email'} validate={[required, maxLength20]}/>
             </div>
@@ -22,8 +23,8 @@ const LoginForm = (props) => {
             <div>
                 <Field component={Input} name={'rememberMe'} type='checkbox'/> remember me
             </div>
-            { props.error && <div className={classes.formSummaryError}> {/* если props.error есть тогда показывает дивку с ошибкой */}
-                {props.error}
+            { error && <div className={classes.formSummaryError}> {/* если props.error есть тогда показывает дивку с ошибкой */}
+                {error}
             </div> }
             <div>
                 <button type={'submit'}>Submit</button>

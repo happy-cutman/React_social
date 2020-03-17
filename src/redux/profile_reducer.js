@@ -55,34 +55,22 @@ export const setUserStatus = (status) => ({type: SET_USER_STATUS, status});
 export const deletePost = (postId) => ({type: DELETE_POST, postId});
 
 // thunk creator
-export const getUserProfile = (userId) => {
-    return (dispatch) => {
+export const getUserProfile = (userId) => async (dispatch) => {
+    let response = await profileAPI.getProfile(userId);
+    dispatch(setUserProfile(response.data))
 
-        profileAPI.getProfile(userId)
-            .then(response => {
-                dispatch(setUserProfile(response.data))
-            });
-    }
 };
 
 // User Status set and update
-export const getUserStatus = (userId) => {
-    return (dispatch) => {
-
-        profileAPI.getStatus(userId)
-            .then(response => {
-                return dispatch(setUserStatus(response.data)) // response.data приходит строка со статусом
-            });
-    }
+export const getUserStatus = (userId) => async (dispatch) => {
+    let response = await profileAPI.getStatus(userId);
+    return dispatch(setUserStatus(response.data)) // response.data приходит строка со статусом
 };
-export const updateUserStatus = (status) => {
-    return (dispatch) => {
-        profileAPI.updateStatus(status)
-            .then( response => {
-                if (response.data.resultCode === 0) {
-                    dispatch(setUserStatus(status))
-                }
-            })
+
+export const updateUserStatus = (status) => async (dispatch) => {
+    let response = await profileAPI.updateStatus(status);
+    if (response.data.resultCode === 0) {
+        dispatch(setUserStatus(status))
     }
 };
 

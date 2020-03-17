@@ -10,11 +10,9 @@ import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 import LoginPage from './components/Login/Login';
-import {connect, Provider} from 'react-redux';
+import {connect} from 'react-redux';
 import {initializeApp} from './redux/app_reducer';
 import Preloader from './components/common/Preloader/Preloader';
-import {compose} from 'redux';
-import store from './redux/redux_store';
 
 
 class App extends React.Component {

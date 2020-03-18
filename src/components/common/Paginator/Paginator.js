@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import classes from './Paginator.module.css';
+import {Pagination} from 'react-js-pagination';
 
 
 let Paginator = (props, portionSize=10) => {
@@ -38,5 +39,19 @@ let Paginator = (props, portionSize=10) => {
         </div>
     )
 };
+
+// const Paginator = (props) => {
+//     return (
+//         <div>
+//             <Pagination
+//                 activePage={props.currentPage}
+//                 itemsCountPerPage={props.pageSize}
+//                 totalItemsCount={props.totalItemsCount}
+//                 pageRangeDisplayed={10}
+//                 onChange={props.onPageChanged}
+//             />
+//         </div>
+//     )
+// };
 
 export default Paginator;

@@ -1,18 +1,22 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import './App.css';
 import {BrowserRouter, Route, withRouter} from 'react-router-dom';
 import News from './components/News/News';
 import Music from './components/Music/Music';
 import Settings from './components/Settings/Settings';
-import DialogsContainer from './components/Dialogs/DialogsContainer';
+// import DialogsContainer from './components/Dialogs/DialogsContainer';
 import NavBarContainer from './components/NavBar/NavBarContainer';
 import UsersContainer from './components/Users/UsersContainer';
-import ProfileContainer from './components/Profile/ProfileContainer';
+// import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 import LoginPage from './components/Login/Login';
 import {connect} from 'react-redux';
 import {initializeApp} from './redux/app_reducer';
 import Preloader from './components/common/Preloader/Preloader';
+import withSuspense from './hoc/withSuspense'
+
+const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
+const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 
 
 class App extends React.Component {
@@ -32,10 +36,10 @@ class App extends React.Component {
                         <HeaderContainer/>
                         <NavBarContainer/>
                         <div className='app-wrapper-content'>
-                            <Route path='/dialogs' render={() => <DialogsContainer/>}/> {/* Отрисовует компонент <Dialogs/> при обарщении по пути  */}
-                            <Route path='/profile/:userId?' render={() => <ProfileContainer/>}/> {/* ? означает что параметр не обязательный */}
+                            <Route path='/dialogs' render={() => withSuspense(<DialogsContainer/>)}/>
+                            <Route path='/profile/:userId?' render={() => withSuspense(<ProfileContainer/>)}/>
                             <Route path='/users' render={() => <UsersContainer/>}/>
-                            <Route path='/news' render={() => <News/>}/>
+                            <Route path='/news' render={() => <News/>}/> {/* Отрисовует компонент <News/> при обарщении по пути  */}
                             <Route path='/music' render={() => <Music/>}/>
                             <Route path='/settings' render={() => <Settings/>}/>
                             <Route path='/login' render={() => <LoginPage/>}/>

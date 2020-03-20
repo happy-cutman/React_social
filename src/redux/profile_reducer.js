@@ -4,6 +4,7 @@ const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE'; // используем константы чтобы не использовать строки и не опечататься
 const SET_USER_STATUS = 'SET_USER_STATUS';
 const DELETE_POST = 'DELETE_POST';
+const SET_USER_AVATAR = 'SET_USER_AVATAR';
 
 let initialState = {  // не имеем права изменять этот объект поэтому делаем копию в reducer и меняем копию
     posts: [
@@ -13,7 +14,7 @@ let initialState = {  // не имеем права изменять этот о
         {id: '4', message: 'Arom dom dom', like: '1'},
     ],
     profile: null,
-    status: ''
+    status: '',
 };
 
 
@@ -31,6 +32,9 @@ const profileReducer = (state = initialState, action) => { // изменяет s
 
         case SET_USER_STATUS:
             return {...state, status: action.status};
+
+        case SET_USER_AVATAR:
+            return {...state, profile: {...state.profile, photos: action.photos}};
 
         case DELETE_POST:
             return {...state,
@@ -53,12 +57,21 @@ export const addPostActionCreator = (newPostText) => ({type: ADD_POST, newPostTe
 export const setUserProfile = (profile) => ({type: SET_USER_PROFILE, profile});
 export const setUserStatus = (status) => ({type: SET_USER_STATUS, status});
 export const deletePost = (postId) => ({type: DELETE_POST, postId});
+export const setUserAvatar = (photos) => ({type: SET_USER_AVATAR, photos}); // photos потому что сервер возвращает массив photos после успешной заливки
 
 // thunk creator
 export const getUserProfile = (userId) => async (dispatch) => {
     let response = await profileAPI.getProfile(userId);
     dispatch(setUserProfile(response.data))
+};
 
+// save user avatar come from <ProfileInfo/>
+export const saveUserAvatar = (file) => async (dispatch) => {
+    let response = await profileAPI.saveUserAvatar(file);
+
+    if (response.data.resultCode === 0) {
+        dispatch(setUserAvatar(response.data.data.photos))
+    }
 };
 
 // User Status set and update

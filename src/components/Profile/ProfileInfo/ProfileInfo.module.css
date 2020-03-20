@@ -6,6 +6,10 @@
     border-radius: 50px;
 }
 
+.descriptionBlock .profileAvatar {
+    max-height: 200px;
+    max-width: 200px;
+}
 
 .jobBlock {
     padding: 10px;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Profile from './Profile';
 import {connect} from 'react-redux';
-import {getUserProfile, getUserStatus, updateUserStatus} from '../../redux/profile_reducer';
+import {getUserProfile, getUserStatus, saveUserAvatar, updateUserStatus} from '../../redux/profile_reducer';
 import {withRouter} from 'react-router-dom';
 import {compose} from 'redux';
 
@@ -10,7 +10,7 @@ import {compose} from 'redux';
 // оборачивает <Profile/>
 class ProfileContainer extends React.Component  {
 
-    componentDidMount() {
+    refreshProfile() {
         let userId = this.props.match.params.userId;
 
         if (!userId) {
@@ -25,11 +25,25 @@ class ProfileContainer extends React.Component  {
         this.props.getUserStatus(userId);
     }
 
+    componentDidMount() {
+        this.refreshProfile()
+    }
+
+    // если id из текущих props, которая пришла из url не равна id из предидущих props тогда запрашиваются новые данные
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.match.params.userId != prevProps.match.params.userId) {
+            this.refreshProfile()
+        }
+
+    }
+
     render() {
 
         return (
             <div>
                 <Profile {...this.props}
+                        saveUserAvatar={this.props.saveUserAvatar}
+                         isOwner={!this.props.match.params.userId}
                          profile={this.props.profile}
                          status={this.props.status}
                          updateUserStatus={this.props.updateUserStatus}/> {/* props который пришёл мы раскукоживаем и как атрибуты прокидываем дальше в компоненту */}
@@ -50,7 +64,7 @@ let mapStateToProps = (state) => {
 };
 
 export default compose(
-    connect(mapStateToProps, {getUserProfile, getUserStatus, updateUserStatus}),
+    connect(mapStateToProps, {getUserProfile, getUserStatus, updateUserStatus, saveUserAvatar}),
     withRouter,
     // withAuthRedirect
 )(ProfileContainer);

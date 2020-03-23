@@ -1,4 +1,5 @@
 import {profileAPI} from '../api/api';
+import {stopSubmit} from 'redux-form';
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE'; // используем константы чтобы не использовать строки и не опечататься
@@ -61,27 +62,40 @@ export const setUserAvatar = (photos) => ({type: SET_USER_AVATAR, photos}); // p
 
 // thunk creator
 export const getUserProfile = (userId) => async (dispatch) => {
-    let response = await profileAPI.getProfile(userId);
+    const response = await profileAPI.getProfile(userId);
     dispatch(setUserProfile(response.data))
 };
 
 // save user avatar come from <ProfileInfo/>
 export const saveUserAvatar = (file) => async (dispatch) => {
-    let response = await profileAPI.saveUserAvatar(file);
+    const response = await profileAPI.saveUserAvatar(file);
 
     if (response.data.resultCode === 0) {
         dispatch(setUserAvatar(response.data.data.photos))
     }
 };
 
+// диспатч санки, которая получает профиль с сервера, который обновился.  укажет ошибку именно для поля фейсбук {'contacts': {'facebook': response.data.messages[0]}}
+export const saveProfile = (profile) => async (dispatch, getState) => {
+    const userId = getState().auth.userId;
+    const response = await profileAPI.saveUserProfile(profile);
+
+    if (response.data.resultCode === 0) {
+        dispatch(getUserProfile(userId))
+    } else {
+        dispatch(stopSubmit('edit_profile', {_error: response.data.messages[0]}));
+        return Promise.reject(response.data.messages[0]);
+    }
+};
+
 // User Status set and update
 export const getUserStatus = (userId) => async (dispatch) => {
-    let response = await profileAPI.getStatus(userId);
+    const response = await profileAPI.getStatus(userId);
     return dispatch(setUserStatus(response.data)) // response.data приходит строка со статусом
 };
 
 export const updateUserStatus = (status) => async (dispatch) => {
-    let response = await profileAPI.updateStatus(status);
+    const response = await profileAPI.updateStatus(status);
     if (response.data.resultCode === 0) {
         dispatch(setUserStatus(status))
     }

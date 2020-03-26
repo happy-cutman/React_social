@@ -15,7 +15,7 @@ import {compose} from 'redux';
 
 // оборачивает <Profile/>
 class ProfileContainer extends React.Component  {
-
+    // match взялся из withRouter connect конектит нас к store, а match условно коннектит к url
     refreshProfile() {
         let userId = this.props.match.params.userId;
 
